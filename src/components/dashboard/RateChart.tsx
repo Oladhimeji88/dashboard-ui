@@ -14,7 +14,7 @@ import { buildSeries, RateKey, TimePeriod } from '../../data/rates';
 
 const seriesMeta: {key: RateKey;label: string;short: string;color: string;}[] =
 [
-{ key: 'conv', label: 'Conventional', short: 'Conv.', color: '#F0C33C' },
+{ key: 'conv', label: 'Conventional', short: 'Conv.', color: '#3DDC84' },
 { key: 'fha', label: 'FHA', short: 'FHA', color: '#C9C7C0' },
 { key: 'va', label: 'VA', short: 'VA', color: '#D6D4CD' }];
 
@@ -110,7 +110,7 @@ export function RateChart({ period }: RateChartProps) {
             
             <Tooltip
               content={<RateTooltip />}
-              cursor={{ fill: 'rgba(251, 210, 78, 0.14)' }} />
+              cursor={{ fill: 'rgba(61, 220, 132, 0.14)' }} />
             
             <Bar dataKey="volume" fill="#E4E2DC" barSize={2} isAnimationActive={false} />
             {visible.fha ?
@@ -137,7 +137,7 @@ export function RateChart({ period }: RateChartProps) {
             <Line
               type="monotone"
               dataKey="conv"
-              stroke="#F0C33C"
+              stroke="#3DDC84"
               strokeWidth={2.6}
               dot={false}
               isAnimationActive={false} /> :

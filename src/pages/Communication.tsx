@@ -181,7 +181,7 @@ export function Communication() {
               <button
               type="submit"
               aria-label="Send reply"
-              className="flex h-9 w-9 items-center justify-center rounded-full bg-accent text-ink transition-colors duration-150 ease-soft hover:bg-[#F3C433]">
+              className="flex h-9 w-9 items-center justify-center rounded-full bg-accent text-ink transition-colors duration-150 ease-soft hover:bg-[#2ECC76]">
               
                 <SendIcon className="h-4 w-4" strokeWidth={2} />
               </button>

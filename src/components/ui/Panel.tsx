@@ -59,7 +59,7 @@ export function IconButton({
       className={[
       'flex h-10 w-10 items-center justify-center rounded-full transition-colors duration-150 ease-soft',
       tone === 'accent' ?
-      'bg-accent text-ink hover:bg-[#F3C433]' :
+      'bg-accent text-ink hover:bg-[#2ECC76]' :
       'bg-panel text-inkSoft hover:bg-line'].
       join(' ')}>
       
