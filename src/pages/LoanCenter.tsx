@@ -2,7 +2,15 @@ import React, { useState } from 'react';
 import { AlertTriangleIcon, PlusIcon } from 'lucide-react';
 import { Panel } from '../components/ui/Panel';
 import { Segmented } from '../components/ui/Segmented';
-import { loans, loanStages, loanTotals, LoanStage } from '../data/loans';
+import { Modal } from '../components/ui/Modal';
+import { useToast } from '../components/ui/Toast';
+import {
+  loans as initialLoans,
+  loanStages,
+  loanTotals,
+  LoanStage,
+  Loan } from
+'../data/loans';
 
 const currency = new Intl.NumberFormat('en-US', {
   style: 'currency',
