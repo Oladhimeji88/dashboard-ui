@@ -62,8 +62,8 @@ export function Login() {
   };
 
   return (
-    <div className="flex min-h-screen w-full bg-canvas font-sans text-ink">
-      <div className="relative hidden w-[46%] flex-col justify-between bg-ink p-12 text-white lg:flex">
+    <div className="flex min-h-screen w-full bg-ink font-sans text-white">
+      <div className="relative hidden w-[46%] flex-col justify-between border-r border-white/10 p-12 lg:flex">
         <div className="flex items-center gap-3">
           <Logo />
           <span className="text-[22px] font-semibold tracking-tight">Vantra</span>
@@ -100,7 +100,7 @@ export function Login() {
           <h1 className="text-[32px] font-semibold leading-none tracking-tight">
             Welcome back
           </h1>
-          <p className="mt-3 text-[15px] text-muted">
+          <p className="mt-3 text-[15px] text-white/60">
             Sign in to get back to your pipeline.
           </p>
 
@@ -116,7 +116,7 @@ export function Login() {
                 value={email}
                 onChange={(event) => setEmail(event.target.value)}
                 placeholder="marcus.hale@vantra.com"
-                className="mt-1.5 w-full rounded-xl bg-panel px-4 py-3 text-sm outline-none ring-1 ring-transparent transition-shadow duration-150 ease-soft focus:bg-white focus:ring-ink" />
+                className="mt-1.5 w-full rounded-xl bg-white/10 px-4 py-3 text-sm text-white outline-none ring-1 ring-white/10 transition-shadow duration-150 ease-soft placeholder:text-white/40 focus:bg-white/15 focus:ring-accent" />
 
             </div>
 
@@ -134,7 +134,7 @@ export function Login() {
                     'Enter your email first'
                   )
                   }
-                  className="text-sm font-medium text-inkSoft underline-offset-2 hover:underline">
+                  className="text-sm font-medium text-white/60 underline-offset-2 hover:text-white hover:underline">
 
                   Forgot password?
                 </button>
@@ -147,13 +147,13 @@ export function Login() {
                   value={password}
                   onChange={(event) => setPassword(event.target.value)}
                   placeholder="••••••••"
-                  className="w-full rounded-xl bg-panel px-4 py-3 pr-12 text-sm outline-none ring-1 ring-transparent transition-shadow duration-150 ease-soft focus:bg-white focus:ring-ink" />
+                  className="w-full rounded-xl bg-white/10 px-4 py-3 pr-12 text-sm text-white outline-none ring-1 ring-white/10 transition-shadow duration-150 ease-soft placeholder:text-white/40 focus:bg-white/15 focus:ring-accent" />
 
                 <button
                   type="button"
                   aria-label={showPassword ? 'Hide password' : 'Show password'}
                   onClick={() => setShowPassword((value) => !value)}
-                  className="absolute right-3 top-1/2 flex h-7 w-7 -translate-y-1/2 items-center justify-center rounded-full text-muted hover:bg-line">
+                  className="absolute right-3 top-1/2 flex h-7 w-7 -translate-y-1/2 items-center justify-center rounded-full text-white/60 hover:bg-white/10 hover:text-white">
 
                   {showPassword ?
                   <EyeOffIcon className="h-4 w-4" strokeWidth={1.9} /> :
@@ -170,12 +170,12 @@ export function Login() {
               </p> :
             null}
 
-            <label className="flex items-center gap-2.5 pt-1 text-sm text-inkSoft">
+            <label className="flex items-center gap-2.5 pt-1 text-sm text-white/60">
               <input
                 type="checkbox"
                 checked={remember}
                 onChange={(event) => setRemember(event.target.checked)}
-                className="h-4 w-4 rounded border-line accent-ink" />
+                className="h-4 w-4 rounded border-white/20 accent-accent" />
 
               Keep me signed in
             </label>
@@ -183,7 +183,7 @@ export function Login() {
             <button
               type="submit"
               disabled={loading}
-              className="flex w-full items-center justify-center gap-2 rounded-full bg-ink py-3.5 text-sm font-semibold text-white transition-colors duration-150 ease-soft hover:bg-inkSoft disabled:opacity-70">
+              className="flex w-full items-center justify-center gap-2 rounded-full bg-accent py-3.5 text-sm font-semibold text-ink transition-colors duration-150 ease-soft hover:bg-[#2ECC76] disabled:opacity-70">
 
               {loading ?
               <Loader2Icon className="h-4 w-4 animate-spin" strokeWidth={2.2} /> :
@@ -192,12 +192,12 @@ export function Login() {
             </button>
           </form>
 
-          <p className="mt-8 text-center text-sm text-muted">
+          <p className="mt-8 text-center text-sm text-white/50">
             New to Vantra?{' '}
             <button
               type="button"
               onClick={() => showToast('Ask your team admin for an invite')}
-              className="font-medium text-ink underline-offset-2 hover:underline">
+              className="font-medium text-white underline-offset-2 hover:underline">
 
               Request access
             </button>
