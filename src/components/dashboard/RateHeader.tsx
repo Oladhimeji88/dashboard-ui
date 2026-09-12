@@ -1,8 +1,9 @@
-import React from 'react';
-import { ArrowUpIcon, SlidersHorizontalIcon } from 'lucide-react';
+import React, { useState } from 'react';
+import { ArrowUpIcon, RefreshCwIcon } from 'lucide-react';
 import { Segmented } from '../ui/Segmented';
 import { Delta } from '../ui/Delta';
 import { rateSummaries, rateMeta, timePeriods, TimePeriod } from '../../data/rates';
+import { useToast } from '../ui/Toast';
 
 type RateHeaderProps = {
   period: TimePeriod;
@@ -10,6 +11,17 @@ type RateHeaderProps = {
 };
 
 export function RateHeader({ period, onPeriodChange }: RateHeaderProps) {
+  const [updatedAt, setUpdatedAt] = useState(rateMeta.updatedAt);
+  const [refreshing, setRefreshing] = useState(false);
+  const showToast = useToast();
+
+  const handleRefresh = () => {
+    setRefreshing(true);
+    setUpdatedAt('Just now');
+    showToast('Rates refreshed');
+    setTimeout(() => setRefreshing(false), 600);
+  };
+
   return (
     <header className="flex flex-wrap items-start gap-x-10 gap-y-6">
       <div className="min-w-[220px]">
@@ -67,14 +79,18 @@ export function RateHeader({ period, onPeriodChange }: RateHeaderProps) {
       <div className="ml-auto flex items-center gap-3 self-center">
         <span className="hidden text-sm text-muted sm:inline">Updated at:</span>
         <span className="rounded-full bg-panel px-4 py-2 text-sm tabular">
-          {rateMeta.updatedAt}
+          {updatedAt}
         </span>
         <button
           type="button"
-          aria-label="Chart settings"
+          aria-label="Refresh rates"
+          onClick={handleRefresh}
           className="flex h-11 w-11 items-center justify-center rounded-full bg-panel text-inkSoft transition-colors duration-150 ease-soft hover:bg-line">
-          
-          <SlidersHorizontalIcon className="h-[18px] w-[18px]" strokeWidth={1.9} />
+
+          <RefreshCwIcon
+            className={`h-[18px] w-[18px] transition-transform duration-500 ${refreshing ? 'animate-spin' : ''}`}
+            strokeWidth={1.9} />
+
         </button>
       </div>
     </header>);

@@ -8,21 +8,24 @@ import { MarketingCenter } from './pages/MarketingCenter';
 import { LoanCenter } from './pages/LoanCenter';
 import { Payroll } from './pages/Payroll';
 import { Profile } from './pages/Profile';
+import { ToastProvider } from './components/ui/Toast';
 
 export function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route element={<AppShell />}>
-          <Route path="/" element={<Dashboard />} />
-          <Route path="/contacts" element={<Contacts />} />
-          <Route path="/communication" element={<Communication />} />
-          <Route path="/marketing" element={<MarketingCenter />} />
-          <Route path="/loans" element={<LoanCenter />} />
-          <Route path="/payroll" element={<Payroll />} />
-          <Route path="/profile" element={<Profile />} />
-        </Route>
-      </Routes>
-    </BrowserRouter>);
+    <ToastProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route element={<AppShell />}>
+            <Route path="/" element={<Dashboard />} />
+            <Route path="/contacts" element={<Contacts />} />
+            <Route path="/communication" element={<Communication />} />
+            <Route path="/marketing" element={<MarketingCenter />} />
+            <Route path="/loans" element={<LoanCenter />} />
+            <Route path="/payroll" element={<Payroll />} />
+            <Route path="/profile" element={<Profile />} />
+          </Route>
+        </Routes>
+      </BrowserRouter>
+    </ToastProvider>);
 
 }

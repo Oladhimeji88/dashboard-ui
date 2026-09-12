@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { ArrowRightIcon } from 'lucide-react';
 import { Panel, SectionHeader } from '../ui/Panel';
 import { Delta } from '../ui/Delta';
@@ -13,6 +14,8 @@ type PipelineSectionProps = {
 const ranges = ['This month', 'Last month', 'This quarter'];
 
 export function PipelineSection({ range, onRangeChange }: PipelineSectionProps) {
+  const navigate = useNavigate();
+
   return (
     <section aria-labelledby="pipeline-heading">
       <div className="flex items-start justify-between gap-4 pb-4">
@@ -39,8 +42,9 @@ export function PipelineSection({ range, onRangeChange }: PipelineSectionProps) 
           <button
             type="button"
             aria-label="Open full pipeline"
+            onClick={() => navigate('/loans')}
             className="flex h-10 w-10 items-center justify-center rounded-full bg-panel text-inkSoft transition-colors duration-150 ease-soft hover:bg-line">
-            
+
             <ArrowRightIcon className="h-[18px] w-[18px]" strokeWidth={1.9} />
           </button>
         </div>
@@ -59,8 +63,9 @@ export function PipelineSection({ range, onRangeChange }: PipelineSectionProps) 
               <button
               type="button"
               aria-label={`Open ${card.title}`}
+              onClick={() => navigate('/loans')}
               className="flex h-9 w-9 items-center justify-center rounded-full bg-white/70 text-inkSoft transition-colors duration-150 ease-soft hover:bg-white">
-              
+
                 <ArrowRightIcon className="h-4 w-4" strokeWidth={2} />
               </button>
             </div>

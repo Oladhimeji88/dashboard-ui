@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { PlusIcon } from 'lucide-react';
 import { Panel } from '../components/ui/Panel';
 import { Delta } from '../components/ui/Delta';
-import { campaigns, marketingTotals } from '../data/campaigns';
+import { Modal } from '../components/ui/Modal';
+import { useToast } from '../components/ui/Toast';
+import { campaigns as initialCampaigns, marketingTotals, Campaign } from '../data/campaigns';
 
 const statusTone: Record<string, string> = {
   Live: 'bg-accent text-ink',
@@ -10,8 +12,38 @@ const statusTone: Record<string, string> = {
   Draft: 'bg-panelSoft text-muted'
 };
 
+const channels: Campaign['channel'][] = ['Email', 'SMS', 'Social'];
+
 export function MarketingCenter() {
   const maxFunnel = marketingTotals.funnel[0].value;
+  const [campaigns, setCampaigns] = useState(initialCampaigns);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [name, setName] = useState('');
+  const [channel, setChannel] = useState<Campaign['channel']>('Email');
+  const [audience, setAudience] = useState('');
+  const showToast = useToast();
+
+  const createCampaign = () => {
+    if (!name.trim()) return;
+    const campaign: Campaign = {
+      id: `cm-${Date.now()}`,
+      name: name.trim(),
+      channel,
+      status: 'Draft',
+      audience: audience.trim() || 'Not set',
+      sent: 0,
+      openRate: 0,
+      replyRate: 0,
+      leads: 0,
+      updated: 'Just now'
+    };
+    setCampaigns((current) => [campaign, ...current]);
+    showToast(`"${campaign.name}" created as a draft`);
+    setName('');
+    setAudience('');
+    setChannel('Email');
+    setModalOpen(false);
+  };
 
   return (
     <div className="pt-6">
@@ -26,12 +58,66 @@ export function MarketingCenter() {
         </div>
         <button
           type="button"
+          onClick={() => setModalOpen(true)}
           className="flex items-center gap-2 rounded-full bg-ink px-5 py-2.5 text-sm font-semibold text-white transition-colors duration-150 ease-soft hover:bg-inkSoft">
-          
+
           <PlusIcon className="h-4 w-4" strokeWidth={2.2} />
           New campaign
         </button>
       </header>
+
+      {modalOpen ?
+      <Modal title="New campaign" onClose={() => setModalOpen(false)}>
+          <div className="space-y-4">
+            <div>
+              <label className="text-sm font-medium" htmlFor="campaign-name">
+                Campaign name
+              </label>
+              <input
+              id="campaign-name"
+              value={name}
+              onChange={(event) => setName(event.target.value)}
+              placeholder="e.g. Spring Rate Special"
+              className="mt-1.5 w-full rounded-xl bg-white px-4 py-2.5 text-sm outline-none ring-1 ring-line focus:ring-ink" />
+
+            </div>
+            <div>
+              <label className="text-sm font-medium" htmlFor="campaign-channel">
+                Channel
+              </label>
+              <select
+              id="campaign-channel"
+              value={channel}
+              onChange={(event) => setChannel(event.target.value as Campaign['channel'])}
+              className="mt-1.5 w-full rounded-xl bg-white px-4 py-2.5 text-sm outline-none ring-1 ring-line focus:ring-ink">
+
+                {channels.map((option) =>
+              <option key={option} value={option}>{option}</option>
+              )}
+              </select>
+            </div>
+            <div>
+              <label className="text-sm font-medium" htmlFor="campaign-audience">
+                Audience
+              </label>
+              <input
+              id="campaign-audience"
+              value={audience}
+              onChange={(event) => setAudience(event.target.value)}
+              placeholder="e.g. Past clients · 1,200"
+              className="mt-1.5 w-full rounded-xl bg-white px-4 py-2.5 text-sm outline-none ring-1 ring-line focus:ring-ink" />
+
+            </div>
+            <button
+            type="button"
+            onClick={createCampaign}
+            className="w-full rounded-full bg-ink py-3 text-sm font-semibold text-white transition-colors duration-150 ease-soft hover:bg-inkSoft">
+
+              Create draft
+            </button>
+          </div>
+        </Modal> :
+      null}
 
       <div className="mt-8 grid gap-4 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,1fr)]">
         <Panel className="p-7">

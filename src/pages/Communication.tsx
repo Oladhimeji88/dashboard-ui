@@ -1,26 +1,64 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useRef, useState } from 'react';
 import { PaperclipIcon, PhoneIcon, SendIcon } from 'lucide-react';
 import { Panel } from '../components/ui/Panel';
 import { Segmented } from '../components/ui/Segmented';
-import { threads } from '../data/threads';
+import { threads as initialThreads } from '../data/threads';
+import { useToast } from '../components/ui/Toast';
 
 const channels = ['All', 'Email', 'SMS', 'Call'] as const;
 type Channel = (typeof channels)[number];
 
 export function Communication() {
   const [channel, setChannel] = useState<Channel>('All');
-  const [activeId, setActiveId] = useState(threads[0].id);
+  const [threadList, setThreadList] = useState(initialThreads);
+  const [activeId, setActiveId] = useState(initialThreads[0].id);
   const [draft, setDraft] = useState('');
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const showToast = useToast();
 
   const visible = useMemo(
     () =>
-    threads.filter(
+    threadList.filter(
       (thread) => channel === 'All' || thread.channel === channel
     ),
-    [channel]
+    [channel, threadList]
   );
   const active = visible.find((thread) => thread.id === activeId) ?? visible[0];
-  const unread = threads.filter((thread) => thread.unread).length;
+  const unread = threadList.filter((thread) => thread.unread).length;
+
+  const sendMessage = () => {
+    if (!draft.trim() || !active) return;
+    const now = new Date();
+    const time = now.toLocaleTimeString('en-US', {
+      hour: 'numeric',
+      minute: '2-digit'
+    });
+    setThreadList((current) =>
+    current.map((thread) =>
+    thread.id === active.id ?
+    {
+      ...thread,
+      preview: draft,
+      time,
+      unread: false,
+      messages: [
+      ...thread.messages,
+      { id: `m-${Date.now()}`, from: 'me', body: draft, time }]
+
+    } :
+    thread
+    )
+    );
+    setDraft('');
+  };
+
+  const handleAttach = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file || !active) return;
+    showToast(`Attached ${file.name}`);
+    setDraft((current) => `${current}${current ? ' ' : ''}[Attachment: ${file.name}]`);
+    event.target.value = '';
+  };
 
   return (
     <div className="pt-6">
@@ -119,8 +157,9 @@ export function Communication() {
               </div>
               <button
               type="button"
+              onClick={() => showToast(`Calling ${active.name}…`)}
               className="flex items-center gap-2 rounded-full bg-white px-4 py-2.5 text-sm font-medium transition-colors duration-150 ease-soft hover:bg-line">
-              
+
                 <PhoneIcon className="h-4 w-4" strokeWidth={1.9} />
                 Call
               </button>
@@ -158,16 +197,23 @@ export function Communication() {
             className="flex items-center gap-3 rounded-full bg-white px-5 py-3"
             onSubmit={(event) => {
               event.preventDefault();
-              setDraft('');
+              sendMessage();
             }}>
-            
+
               <button
               type="button"
               aria-label="Attach a document"
+              onClick={() => fileInputRef.current?.click()}
               className="text-muted transition-colors duration-150 ease-soft hover:text-ink">
-              
+
                 <PaperclipIcon className="h-[18px] w-[18px]" strokeWidth={1.9} />
               </button>
+              <input
+              ref={fileInputRef}
+              type="file"
+              onChange={handleAttach}
+              className="hidden" />
+
               <label className="sr-only" htmlFor="reply">
                 Reply
               </label>

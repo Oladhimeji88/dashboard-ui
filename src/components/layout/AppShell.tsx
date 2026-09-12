@@ -67,8 +67,16 @@ export function AppShell() {
         <div className="mx-auto flex h-20 w-full max-w-[1600px] items-center gap-6 px-6 lg:px-10">
           <div className="flex shrink-0 items-center gap-3">
             <span className="flex h-11 w-11 items-center justify-center rounded-full bg-accent">
-              <svg viewBox="0 0 24 24" className="h-5 w-5" aria-hidden="true">
-                <path d="M17 3.5 7 12l10 8.5V3.5Z" fill="#17171A" />
+              <svg viewBox="0 0 24 24" className="h-[22px] w-[22px]" aria-hidden="true">
+                <path
+                  d="M4.25 5.25 12 18.5l7.75-13.25"
+                  fill="none"
+                  stroke="#17171A"
+                  strokeWidth="2.6"
+                  strokeLinecap="round"
+                  strokeLinejoin="round" />
+
+                <circle cx="19.75" cy="5.25" r="2" fill="#17171A" />
               </svg>
             </span>
             <span className="text-[22px] font-semibold tracking-tight">Vantra</span>
