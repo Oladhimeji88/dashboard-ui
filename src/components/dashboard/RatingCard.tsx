@@ -107,7 +107,7 @@ export function RatingCard() {
           <motion.span
             key={index}
             className="w-[3px] rounded-full bg-accent"
-            initial={{ height: 0 }}
+            initial={{ height: '0%' }}
             animate={{ height: `${value / max * 100}%` }}
             transition={{ duration: 0.5, delay: 0.3 + index * 0.02, ease: [0.23, 1, 0.32, 1] }} />
 
