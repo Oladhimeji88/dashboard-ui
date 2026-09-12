@@ -2,6 +2,7 @@ import React from 'react';
 import { DownloadIcon } from 'lucide-react';
 import { Panel } from '../components/ui/Panel';
 import { Delta } from '../components/ui/Delta';
+import { useToast } from '../components/ui/Toast';
 import { commissions, monthlyEarnings, payrollSummary } from '../data/payroll';
 
 const currency = new Intl.NumberFormat('en-US', {
@@ -18,6 +19,29 @@ const statusTone: Record<string, string> = {
 
 export function Payroll() {
   const maxEarning = Math.max(...monthlyEarnings.map((month) => month.value));
+  const showToast = useToast();
+
+  const downloadStatement = () => {
+    const header = ['Loan', 'Borrower', 'Closed On', 'Volume', 'BPS', 'Payout', 'Status'];
+    const rows = commissions.map((row) => [
+    row.loanId,
+    row.borrower,
+    row.closedOn,
+    row.volume,
+    row.bps,
+    row.payout,
+    row.status]
+    );
+    const csv = [header, ...rows].map((line) => line.join(',')).join('\n');
+    const blob = new Blob([csv], { type: 'text/csv' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'commission-statement.csv';
+    link.click();
+    URL.revokeObjectURL(url);
+    showToast('Statement downloaded');
+  };
 
   return (
     <div className="pt-6">
@@ -32,8 +56,9 @@ export function Payroll() {
         </div>
         <button
           type="button"
+          onClick={downloadStatement}
           className="flex items-center gap-2 rounded-full bg-panel px-5 py-2.5 text-sm font-medium text-inkSoft transition-colors duration-150 ease-soft hover:bg-line">
-          
+
           <DownloadIcon className="h-4 w-4" strokeWidth={2} />
           Download statement
         </button>

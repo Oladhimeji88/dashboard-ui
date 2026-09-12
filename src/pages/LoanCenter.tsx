@@ -27,13 +27,43 @@ const summary = [
 { label: 'Pull-through', value: `${loanTotals.pullThrough}%`, hint: 'Last 90 days' }];
 
 
+const products: Loan['product'][] = ['Conventional', 'FHA', 'VA'];
+
 export function LoanCenter() {
   const [view, setView] = useState<View>('Board');
+  const [loans, setLoans] = useState(initialLoans);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [borrower, setBorrower] = useState('');
+  const [amount, setAmount] = useState('');
+  const [product, setProduct] = useState<Loan['product']>('Conventional');
+  const showToast = useToast();
 
   const stageTotal = (stage: LoanStage) =>
   loans.
   filter((loan) => loan.stage === stage).
   reduce((sum, loan) => sum + loan.amount, 0);
+
+  const startFile = () => {
+    if (!borrower.trim() || !amount.trim()) return;
+    const loan: Loan = {
+      id: `L-${Math.floor(3000 + Math.random() * 900)}`,
+      borrower: borrower.trim(),
+      avatar: '/acf287e1-466b-4cb3-9f01-c6573edbeb4b.jpg',
+      stage: 'Application',
+      amount: Number(amount) || 0,
+      rate: '5.99',
+      product,
+      ltv: 80,
+      closeDate: 'TBD',
+      daysInStage: 0
+    };
+    setLoans((current) => [loan, ...current]);
+    showToast(`Started file for ${loan.borrower}`);
+    setBorrower('');
+    setAmount('');
+    setProduct('Conventional');
+    setModalOpen(false);
+  };
 
   return (
     <div className="pt-6">
@@ -50,13 +80,68 @@ export function LoanCenter() {
           <Segmented label="View" options={views} value={view} onChange={setView} />
           <button
             type="button"
+            onClick={() => setModalOpen(true)}
             className="flex items-center gap-2 rounded-full bg-ink px-5 py-2.5 text-sm font-semibold text-white transition-colors duration-150 ease-soft hover:bg-inkSoft">
-            
+
             <PlusIcon className="h-4 w-4" strokeWidth={2.2} />
             Start a file
           </button>
         </div>
       </header>
+
+      {modalOpen ?
+      <Modal title="Start a new file" onClose={() => setModalOpen(false)}>
+          <div className="space-y-4">
+            <div>
+              <label className="text-sm font-medium" htmlFor="loan-borrower">
+                Borrower name
+              </label>
+              <input
+              id="loan-borrower"
+              value={borrower}
+              onChange={(event) => setBorrower(event.target.value)}
+              placeholder="e.g. Jordan Lee"
+              className="mt-1.5 w-full rounded-xl bg-white px-4 py-2.5 text-sm outline-none ring-1 ring-line focus:ring-ink" />
+
+            </div>
+            <div>
+              <label className="text-sm font-medium" htmlFor="loan-amount">
+                Loan amount
+              </label>
+              <input
+              id="loan-amount"
+              type="number"
+              value={amount}
+              onChange={(event) => setAmount(event.target.value)}
+              placeholder="e.g. 450000"
+              className="mt-1.5 w-full rounded-xl bg-white px-4 py-2.5 text-sm outline-none ring-1 ring-line focus:ring-ink" />
+
+            </div>
+            <div>
+              <label className="text-sm font-medium" htmlFor="loan-product">
+                Product
+              </label>
+              <select
+              id="loan-product"
+              value={product}
+              onChange={(event) => setProduct(event.target.value as Loan['product'])}
+              className="mt-1.5 w-full rounded-xl bg-white px-4 py-2.5 text-sm outline-none ring-1 ring-line focus:ring-ink">
+
+                {products.map((option) =>
+              <option key={option} value={option}>{option}</option>
+              )}
+              </select>
+            </div>
+            <button
+            type="button"
+            onClick={startFile}
+            className="w-full rounded-full bg-ink py-3 text-sm font-semibold text-white transition-colors duration-150 ease-soft hover:bg-inkSoft">
+
+              Start file
+            </button>
+          </div>
+        </Modal> :
+      null}
 
       <div className="mt-8 grid gap-4 sm:grid-cols-3">
         {summary.map((item, index) =>

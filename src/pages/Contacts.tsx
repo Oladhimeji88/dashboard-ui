@@ -8,10 +8,13 @@ import {
 'lucide-react';
 import { Panel } from '../components/ui/Panel';
 import { Segmented } from '../components/ui/Segmented';
+import { Modal } from '../components/ui/Modal';
+import { useToast } from '../components/ui/Toast';
 import {
-  contacts,
+  contacts as initialContacts,
   contactStages,
-  ContactStageFilter } from
+  ContactStageFilter,
+  Contact } from
 '../data/contacts';
 
 const currency = new Intl.NumberFormat('en-US', {
@@ -28,9 +31,15 @@ const stageTone: Record<string, string> = {
 };
 
 export function Contacts() {
+  const [contacts, setContacts] = useState(initialContacts);
   const [stage, setStage] = useState<ContactStageFilter>('All');
   const [query, setQuery] = useState('');
-  const [selectedId, setSelectedId] = useState(contacts[0].id);
+  const [selectedId, setSelectedId] = useState(initialContacts[0].id);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
+  const showToast = useToast();
 
   const filtered = useMemo(
     () =>
@@ -41,11 +50,49 @@ export function Contacts() {
       includes(query.trim().toLowerCase());
       return matchesStage && matchesQuery;
     }),
-    [stage, query]
+    [stage, query, contacts]
   );
 
   const selected =
   filtered.find((contact) => contact.id === selectedId) ?? filtered[0];
+
+  const createContact = () => {
+    if (!name.trim()) return;
+    const contact: Contact = {
+      id: `c-${Date.now()}`,
+      name: name.trim(),
+      avatar: '/acf287e1-466b-4cb3-9f01-c6573edbeb4b.jpg',
+      stage: 'Lead',
+      email: email.trim() || 'unknown@mail.com',
+      phone: phone.trim() || '—',
+      location: 'Unknown',
+      loanType: 'Conventional',
+      amount: 0,
+      score: 50,
+      lastTouch: 'Just now',
+      owner: 'Marcus Hale',
+      nextStep: 'First discovery call'
+    };
+    setContacts((current) => [contact, ...current]);
+    setSelectedId(contact.id);
+    showToast(`Added ${contact.name} as a new lead`);
+    setName('');
+    setEmail('');
+    setPhone('');
+    setModalOpen(false);
+  };
+
+  const logActivity = () => {
+    if (!selected) return;
+    setContacts((current) =>
+    current.map((contact) =>
+    contact.id === selected.id ?
+    { ...contact, lastTouch: 'Just now' } :
+    contact
+    )
+    );
+    showToast(`Activity logged for ${selected.name}`);
+  };
 
   return (
     <div className="pt-6">
@@ -81,13 +128,65 @@ export function Contacts() {
           
           <button
             type="button"
+            onClick={() => setModalOpen(true)}
             className="flex items-center gap-2 rounded-full bg-ink px-5 py-2.5 text-sm font-semibold text-white transition-colors duration-150 ease-soft hover:bg-inkSoft">
-            
+
             <PlusIcon className="h-4 w-4" strokeWidth={2.2} />
             New contact
           </button>
         </div>
       </header>
+
+      {modalOpen ?
+      <Modal title="New contact" onClose={() => setModalOpen(false)}>
+          <div className="space-y-4">
+            <div>
+              <label className="text-sm font-medium" htmlFor="contact-name">
+                Name
+              </label>
+              <input
+              id="contact-name"
+              value={name}
+              onChange={(event) => setName(event.target.value)}
+              placeholder="e.g. Jordan Lee"
+              className="mt-1.5 w-full rounded-xl bg-white px-4 py-2.5 text-sm outline-none ring-1 ring-line focus:ring-ink" />
+
+            </div>
+            <div>
+              <label className="text-sm font-medium" htmlFor="contact-email">
+                Email
+              </label>
+              <input
+              id="contact-email"
+              type="email"
+              value={email}
+              onChange={(event) => setEmail(event.target.value)}
+              placeholder="jordan@mail.com"
+              className="mt-1.5 w-full rounded-xl bg-white px-4 py-2.5 text-sm outline-none ring-1 ring-line focus:ring-ink" />
+
+            </div>
+            <div>
+              <label className="text-sm font-medium" htmlFor="contact-phone">
+                Phone
+              </label>
+              <input
+              id="contact-phone"
+              value={phone}
+              onChange={(event) => setPhone(event.target.value)}
+              placeholder="(555) 000-0000"
+              className="mt-1.5 w-full rounded-xl bg-white px-4 py-2.5 text-sm outline-none ring-1 ring-line focus:ring-ink" />
+
+            </div>
+            <button
+            type="button"
+            onClick={createContact}
+            className="w-full rounded-full bg-ink py-3 text-sm font-semibold text-white transition-colors duration-150 ease-soft hover:bg-inkSoft">
+
+              Add contact
+            </button>
+          </div>
+        </Modal> :
+      null}
 
       <div className="mt-8 grid gap-6 xl:grid-cols-[minmax(0,1.9fr)_minmax(0,1fr)]">
         <section aria-label="Contact list">
@@ -222,8 +321,9 @@ export function Contacts() {
 
             <button
             type="button"
+            onClick={logActivity}
             className="mt-6 w-full rounded-full bg-ink py-3 text-sm font-semibold text-white transition-colors duration-150 ease-soft hover:bg-inkSoft">
-            
+
               Log an activity
             </button>
           </Panel> :
