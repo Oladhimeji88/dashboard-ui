@@ -149,8 +149,12 @@ export function Payroll() {
                     </span>
                     <motion.div
                       className={`w-full rounded-lg ${last ? 'bg-ink' : 'bg-accent'}`}
-                      initial={{ height: '0%' }}
-                      animate={{ height: `${month.value / maxEarning * 100}%` }}
+                      style={{
+                        height: `${month.value / maxEarning * 100}%`,
+                        transformOrigin: 'bottom'
+                      }}
+                      initial={{ scaleY: 0 }}
+                      animate={{ scaleY: 1 }}
                       transition={{ duration: 0.6, delay: 0.3 + index * 0.06, ease: [0.23, 1, 0.32, 1] }} />
 
                     <span className="text-xs text-muted">{month.month}</span>
