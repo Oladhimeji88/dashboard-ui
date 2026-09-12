@@ -1,4 +1,5 @@
 import React, { useMemo, useState } from 'react';
+import { motion } from 'framer-motion';
 import {
   Bar,
   CartesianGrid,
@@ -78,7 +79,12 @@ export function RateChart({ period }: RateChartProps) {
   }, [data]);
 
   return (
-    <section aria-label="Rate history" className="relative mt-8">
+    <motion.section
+      aria-label="Rate history"
+      className="relative mt-8"
+      initial={{ opacity: 0, y: 16 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5, delay: 0.15, ease: [0.23, 1, 0.32, 1] }}>
       <div className="h-[340px] w-full">
         <ResponsiveContainer width="100%" height="100%">
           <ComposedChart
@@ -112,7 +118,13 @@ export function RateChart({ period }: RateChartProps) {
               content={<RateTooltip />}
               cursor={{ fill: 'rgba(61, 220, 132, 0.14)' }} />
             
-            <Bar dataKey="volume" fill="#E4E2DC" barSize={2} isAnimationActive={false} />
+            <Bar
+              dataKey="volume"
+              fill="#E4E2DC"
+              barSize={2}
+              isAnimationActive
+              animationDuration={700} />
+
             {visible.fha ?
             <Line
               type="monotone"
@@ -120,7 +132,9 @@ export function RateChart({ period }: RateChartProps) {
               stroke="#C9C7C0"
               strokeWidth={1.2}
               dot={false}
-              isAnimationActive={false} /> :
+              isAnimationActive
+              animationDuration={900}
+              animationEasing="ease-out" /> :
 
             null}
             {visible.va ?
@@ -130,7 +144,9 @@ export function RateChart({ period }: RateChartProps) {
               stroke="#D6D4CD"
               strokeWidth={1.2}
               dot={false}
-              isAnimationActive={false} /> :
+              isAnimationActive
+              animationDuration={900}
+              animationEasing="ease-out" /> :
 
             null}
             {visible.conv ?
@@ -140,7 +156,9 @@ export function RateChart({ period }: RateChartProps) {
               stroke="#3DDC84"
               strokeWidth={2.6}
               dot={false}
-              isAnimationActive={false} /> :
+              isAnimationActive
+              animationDuration={1100}
+              animationEasing="ease-out" /> :
 
             null}
           </ComposedChart>
@@ -173,6 +191,6 @@ export function RateChart({ period }: RateChartProps) {
           <span className="absolute -top-[3px] right-0 h-3 w-3 rounded-full bg-white ring-1 ring-line" />
         </div>
       </div>
-    </section>);
+    </motion.section>);
 
 }

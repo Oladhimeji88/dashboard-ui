@@ -1,5 +1,6 @@
 import React, { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import {
   AwardIcon,
   CameraIcon,
@@ -14,6 +15,7 @@ import {
   XIcon } from
 'lucide-react';
 import { Panel, SectionHeader } from '../components/ui/Panel';
+import { Reveal } from '../components/ui/Reveal';
 import { useAuth } from '../context/AuthContext';
 import {
   achievements,
@@ -116,14 +118,18 @@ export function Profile() {
   return (
     <div className="pt-6">
       <header className="flex flex-wrap items-end justify-between gap-6">
-        <div>
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, ease: [0.23, 1, 0.32, 1] }}>
+
           <h1 className="text-[40px] font-semibold leading-none tracking-tight">
             Profile
           </h1>
           <p className="mt-3 text-[15px] text-muted">
             Manage your account, performance, and preferences
           </p>
-        </div>
+        </motion.div>
         {editing ?
         <div className="flex items-center gap-2">
             <button
@@ -317,8 +323,9 @@ export function Profile() {
 
         <div className="grid gap-6">
           <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-            {profileStats.map((stat) =>
-            <Panel key={stat.id} className="p-6">
+            {profileStats.map((stat, index) =>
+            <Reveal key={stat.id} delay={index * 0.08}>
+              <Panel className="p-6">
                 <p className="text-sm text-muted">{stat.label}</p>
                 <p className="mt-3 text-[28px] font-semibold leading-none tracking-tight tabular">
                   {stat.value}
@@ -327,6 +334,7 @@ export function Profile() {
               <p className="mt-2 text-xs text-muted">{stat.hint}</p> :
               null}
               </Panel>
+            </Reveal>
             )}
           </div>
 
@@ -336,9 +344,9 @@ export function Profile() {
               subtitle="Milestones earned this year" />
 
             <div className="grid gap-3 sm:grid-cols-2">
-              {achievements.map((achievement) =>
-              <div
-                key={achievement.id}
+              {achievements.map((achievement, index) =>
+              <Reveal key={achievement.id} delay={index * 0.08} y={12}>
+                <div
                 className="flex items-start gap-3 rounded-2xl bg-white p-4">
 
                   <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-accentSoft text-inkSoft">
@@ -352,6 +360,7 @@ export function Profile() {
                     <p className="mt-1.5 text-xs text-muted">{achievement.date}</p>
                   </div>
                 </div>
+              </Reveal>
               )}
             </div>
           </Panel>
@@ -360,11 +369,11 @@ export function Profile() {
             <Panel className="p-6">
               <SectionHeader title="Recent activity" />
               <ul className="space-y-4">
-                {recentActivity.map((item) =>
-                <li key={item.id} className="flex items-start justify-between gap-4">
+                {recentActivity.map((item, index) =>
+                <Reveal key={item.id} as="li" delay={index * 0.06} y={8} className="flex items-start justify-between gap-4">
                     <p className="text-[15px] text-inkSoft">{item.label}</p>
                     <p className="shrink-0 text-xs text-muted">{item.time}</p>
-                  </li>
+                  </Reveal>
                 )}
               </ul>
             </Panel>

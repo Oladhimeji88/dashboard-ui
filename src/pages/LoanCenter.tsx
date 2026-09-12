@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
+import { motion } from 'framer-motion';
 import { AlertTriangleIcon, PlusIcon } from 'lucide-react';
 import { Panel } from '../components/ui/Panel';
 import { Segmented } from '../components/ui/Segmented';
 import { Modal } from '../components/ui/Modal';
+import { CountUp } from '../components/ui/CountUp';
+import { Reveal } from '../components/ui/Reveal';
 import { useToast } from '../components/ui/Toast';
 import {
   loans as initialLoans,
@@ -22,9 +25,24 @@ const views = ['Board', 'List'] as const;
 type View = (typeof views)[number];
 
 const summary = [
-{ label: 'Pipeline volume', value: currency.format(loanTotals.volume), hint: '6 active files' },
-{ label: 'Avg. days to close', value: `${loanTotals.avgDaysToClose}`, hint: '4 faster than target' },
-{ label: 'Pull-through', value: `${loanTotals.pullThrough}%`, hint: 'Last 90 days' }];
+{
+  label: 'Pipeline volume',
+  raw: loanTotals.volume,
+  format: (n: number) => currency.format(n),
+  hint: '6 active files'
+},
+{
+  label: 'Avg. days to close',
+  raw: loanTotals.avgDaysToClose,
+  format: undefined,
+  hint: '4 faster than target'
+},
+{
+  label: 'Pull-through',
+  raw: loanTotals.pullThrough,
+  format: (n: number) => `${n}%`,
+  hint: 'Last 90 days'
+}];
 
 
 const products: Loan['product'][] = ['Conventional', 'FHA', 'VA'];
@@ -68,14 +86,18 @@ export function LoanCenter() {
   return (
     <div className="pt-6">
       <header className="flex flex-wrap items-end justify-between gap-6">
-        <div>
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, ease: [0.23, 1, 0.32, 1] }}>
+
           <h1 className="text-[40px] font-semibold leading-none tracking-tight">
             Loan Center
           </h1>
           <p className="mt-3 text-[15px] text-muted">
             2 files are blocked and need action today
           </p>
-        </div>
+        </motion.div>
         <div className="flex items-center gap-3">
           <Segmented label="View" options={views} value={view} onChange={setView} />
           <button
@@ -145,20 +167,21 @@ export function LoanCenter() {
 
       <div className="mt-8 grid gap-4 sm:grid-cols-3">
         {summary.map((item, index) =>
-        <Panel
-          key={item.label}
+        <Reveal key={item.label} delay={index * 0.1}>
+          <Panel
           className={`p-6 ${index === 0 ? 'sm:col-span-1 bg-ink text-white' : ''}`}>
-          
+
             <p className={`text-sm ${index === 0 ? 'text-white/60' : 'text-muted'}`}>
               {item.label}
             </p>
             <p className="mt-3 text-[34px] font-semibold leading-none tracking-tight tabular">
-              {item.value}
+              <CountUp value={item.raw} format={item.format} />
             </p>
             <p className={`mt-2 text-sm ${index === 0 ? 'text-white/60' : 'text-muted'}`}>
               {item.hint}
             </p>
           </Panel>
+        </Reveal>
         )}
       </div>
 
@@ -175,8 +198,9 @@ export function LoanCenter() {
                   </span>
                 </div>
                 <div className="flex flex-1 flex-col gap-3">
-                  {stageLoans.map((loan) =>
-                <Panel key={loan.id} as="article" className="flex flex-col p-5">
+                  {stageLoans.map((loan, index) =>
+                <Reveal key={loan.id} delay={index * 0.06} y={12}>
+                  <Panel as="article" className="flex flex-col p-5">
                       <div className="flex items-center gap-3">
                         <img
                       src={loan.avatar}
@@ -222,7 +246,8 @@ export function LoanCenter() {
                           </p>
                     }
                       </div>
-                    </Panel>
+                  </Panel>
+                </Reveal>
                 )}
                   {stageLoans.length === 0 ?
                 <div className="rounded-[26px] border border-dashed border-line py-10 text-center text-xs text-muted">
@@ -248,8 +273,14 @@ export function LoanCenter() {
               </tr>
             </thead>
             <tbody>
-              {loans.map((loan) =>
-            <tr key={loan.id} className="border-t border-line hover:bg-panelSoft">
+              {loans.map((loan, index) =>
+            <motion.tr
+              key={loan.id}
+              layout
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.35, delay: index * 0.04, ease: [0.23, 1, 0.32, 1] }}
+              className="border-t border-line hover:bg-panelSoft">
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-3">
                       <img src={loan.avatar} alt="" className="h-9 w-9 rounded-full object-cover" />
@@ -266,7 +297,7 @@ export function LoanCenter() {
                   </td>
                   <td className="px-3 py-4 text-right text-sm tabular">{loan.rate}%</td>
                   <td className="px-6 py-4 text-right text-sm text-muted">{loan.closeDate}</td>
-                </tr>
+                </motion.tr>
             )}
             </tbody>
           </table>

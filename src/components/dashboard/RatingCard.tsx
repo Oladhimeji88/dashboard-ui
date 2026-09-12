@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
+import { motion } from 'framer-motion';
 import { ChevronDownIcon, MinusIcon, PlusIcon, SlidersHorizontalIcon, XIcon } from 'lucide-react';
 import { Panel } from '../ui/Panel';
+import { CountUp } from '../ui/CountUp';
 import { ratingCard } from '../../data/pipeline';
 
 export function RatingCard() {
@@ -87,13 +89,13 @@ export function RatingCard() {
 
         <div className="flex items-baseline justify-center gap-6">
           <span className="text-[52px] font-semibold leading-none tracking-tight text-line tabular">
-            {ratingCard.previous}
+            <CountUp value={ratingCard.previous} />
           </span>
           <span className="text-[76px] font-semibold leading-none tracking-tight tabular">
-            {ratingCard.score}
+            <CountUp value={ratingCard.score} duration={1100} />
           </span>
           <span className="text-[52px] font-semibold leading-none tracking-tight text-line tabular">
-            {ratingCard.next}
+            <CountUp value={ratingCard.next} />
           </span>
         </div>
         <p className="mt-3 text-center text-sm text-muted">
@@ -102,10 +104,12 @@ export function RatingCard() {
 
         <div className="mt-auto flex h-16 items-end justify-center gap-[3px] pt-8">
           {ratingCard.spark.map((value, index) =>
-          <span
+          <motion.span
             key={index}
             className="w-[3px] rounded-full bg-accent"
-            style={{ height: `${value / max * 100}%` }} />
+            initial={{ height: 0 }}
+            animate={{ height: `${value / max * 100}%` }}
+            transition={{ duration: 0.5, delay: 0.3 + index * 0.02, ease: [0.23, 1, 0.32, 1] }} />
 
           )}
         </div>

@@ -4,6 +4,8 @@ import { ArrowRightIcon } from 'lucide-react';
 import { Panel, SectionHeader } from '../ui/Panel';
 import { Delta } from '../ui/Delta';
 import { DotMatrix } from '../ui/DotMatrix';
+import { CountUp } from '../ui/CountUp';
+import { Reveal } from '../ui/Reveal';
 import { pipelineCards } from '../../data/pipeline';
 
 type PipelineSectionProps = {
@@ -51,8 +53,9 @@ export function PipelineSection({ range, onRangeChange }: PipelineSectionProps) 
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2">
-        {pipelineCards.map((card) =>
-        <Panel key={card.id} as="article" className="flex flex-col p-6">
+        {pipelineCards.map((card, index) =>
+        <Reveal key={card.id} delay={index * 0.1}>
+          <Panel as="article" className="flex flex-col p-6">
             <div className="flex items-start justify-between gap-4">
               <div>
                 <h3 className="text-[19px] font-semibold tracking-tight">
@@ -73,7 +76,7 @@ export function PipelineSection({ range, onRangeChange }: PipelineSectionProps) 
             <div className="mt-auto flex items-end justify-between gap-4 pt-8">
               <div>
                 <p className="text-[56px] font-semibold leading-none tracking-tight tabular">
-                  {card.value}
+                  <CountUp value={card.value} duration={1000} />
                 </p>
                 <div className="mt-3">
                   <Delta
@@ -98,6 +101,7 @@ export function PipelineSection({ range, onRangeChange }: PipelineSectionProps) 
               </div>
             </div>
           </Panel>
+        </Reveal>
         )}
       </div>
     </section>);

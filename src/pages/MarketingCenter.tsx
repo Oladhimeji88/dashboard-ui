@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
+import { motion } from 'framer-motion';
 import { PlusIcon } from 'lucide-react';
 import { Panel } from '../components/ui/Panel';
 import { Delta } from '../components/ui/Delta';
 import { Modal } from '../components/ui/Modal';
+import { CountUp } from '../components/ui/CountUp';
 import { useToast } from '../components/ui/Toast';
 import { campaigns as initialCampaigns, marketingTotals, Campaign } from '../data/campaigns';
 
@@ -48,14 +50,18 @@ export function MarketingCenter() {
   return (
     <div className="pt-6">
       <header className="flex flex-wrap items-end justify-between gap-6">
-        <div>
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, ease: [0.23, 1, 0.32, 1] }}>
+
           <h1 className="text-[40px] font-semibold leading-none tracking-tight">
             Marketing Center
           </h1>
           <p className="mt-3 text-[15px] text-muted">
             Two campaigns are live · next send Monday 9:00 AM
           </p>
-        </div>
+        </motion.div>
         <button
           type="button"
           onClick={() => setModalOpen(true)}
@@ -124,7 +130,7 @@ export function MarketingCenter() {
           <p className="text-sm text-muted">Leads generated this month</p>
           <div className="mt-4 flex items-end gap-5">
             <p className="text-[72px] font-semibold leading-none tracking-tight tabular">
-              {marketingTotals.leadsThisMonth}
+              <CountUp value={marketingTotals.leadsThisMonth} duration={1000} />
             </p>
             <div className="pb-3">
               <Delta direction="up" value={String(marketingTotals.leadsDelta)} suffix="%" />
@@ -136,7 +142,7 @@ export function MarketingCenter() {
             <div className="rounded-2xl bg-white p-4">
               <p className="text-xs text-muted">Cost per lead</p>
               <p className="mt-1 text-[22px] font-semibold tabular">
-                ${marketingTotals.costPerLead}
+                $<CountUp value={marketingTotals.costPerLead} />
               </p>
             </div>
             <div className="rounded-2xl bg-white p-4">
@@ -163,12 +169,12 @@ export function MarketingCenter() {
                   </span>
                 </div>
                 <div className="mt-2 h-2.5 w-full rounded-full bg-white">
-                  <div
+                  <motion.div
                   className={`h-full rounded-full ${index === marketingTotals.funnel.length - 1 ? 'bg-ink' : 'bg-accent'}`}
-                  style={{
-                    width: `${Math.max(3, step.value / maxFunnel * 100)}%`
-                  }} />
-                
+                  initial={{ width: 0 }}
+                  animate={{ width: `${Math.max(3, step.value / maxFunnel * 100)}%` }}
+                  transition={{ duration: 0.7, delay: index * 0.1, ease: [0.23, 1, 0.32, 1] }} />
+
                 </div>
               </li>
             )}
@@ -194,11 +200,15 @@ export function MarketingCenter() {
               </tr>
             </thead>
             <tbody>
-              {campaigns.map((campaign) =>
-              <tr
+              {campaigns.map((campaign, index) =>
+              <motion.tr
+                layout
                 key={campaign.id}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.35, delay: index * 0.05, ease: [0.23, 1, 0.32, 1] }}
                 className="border-t border-line transition-colors duration-150 ease-soft hover:bg-panelSoft">
-                
+
                   <td className="px-6 py-4">
                     <p className="text-[15px] font-semibold">{campaign.name}</p>
                     <p className="text-xs text-muted">{campaign.audience}</p>
@@ -223,7 +233,7 @@ export function MarketingCenter() {
                   <td className="whitespace-nowrap px-6 py-4 text-right text-sm text-muted">
                     {campaign.updated}
                   </td>
-                </tr>
+                </motion.tr>
               )}
             </tbody>
           </table>

@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
 import { SendIcon, SparklesIcon } from 'lucide-react';
 import { Panel } from '../components/ui/Panel';
 import { getAssistantReply, suggestedPrompts } from '../data/assistant';
@@ -67,22 +68,30 @@ export function AIChat() {
 
   return (
     <div className="pt-6">
-      <header>
+      <motion.header
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4, ease: [0.23, 1, 0.32, 1] }}>
+
         <h1 className="text-[40px] font-semibold leading-none tracking-tight">
           AI Assistant
         </h1>
         <p className="mt-3 text-[15px] text-muted">
           Ask about rates, pipeline, leads, payroll, or campaigns
         </p>
-      </header>
+      </motion.header>
 
       <Panel as="section" className="mt-8 flex min-h-[560px] flex-col p-6">
         <ol className="max-h-[440px] flex-1 space-y-5 overflow-y-auto pr-1">
+          <AnimatePresence initial={false}>
           {messages.map((message) => {
             const mine = message.from === 'user';
             return (
-              <li
+              <motion.li
                 key={message.id}
+                initial={{ opacity: 0, y: 14, scale: 0.98 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                transition={{ duration: 0.32, ease: [0.23, 1, 0.32, 1] }}
                 className={mine ? 'flex justify-end' : 'flex items-start gap-3'}>
 
                 {mine ? null : <AssistantAvatar />}
@@ -99,33 +108,42 @@ export function AIChat() {
                     {message.time}
                   </p>
                 </div>
-              </li>);
+              </motion.li>);
 
           })}
           {thinking ?
-          <li className="flex items-start gap-3">
+          <motion.li
+            key="thinking"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0 }}
+            className="flex items-start gap-3">
               <AssistantAvatar />
               <div className="flex items-center gap-1.5 rounded-3xl rounded-bl-lg bg-white px-5 py-4">
                 <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-muted [animation-delay:-0.2s]" />
                 <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-muted [animation-delay:-0.1s]" />
                 <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-muted" />
               </div>
-            </li> :
+            </motion.li> :
           null}
+          </AnimatePresence>
           <div ref={endRef} />
         </ol>
 
         {messages.length <= 1 ?
         <div className="flex flex-wrap gap-2 border-t border-line pt-5">
-            {suggestedPrompts.map((prompt) =>
-          <button
+            {suggestedPrompts.map((prompt, index) =>
+          <motion.button
             key={prompt.id}
             type="button"
             onClick={() => sendMessage(prompt.label)}
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3, delay: 0.1 + index * 0.05, ease: [0.23, 1, 0.32, 1] }}
             className="rounded-full bg-panel px-4 py-2 text-sm text-inkSoft transition-colors duration-150 ease-soft hover:bg-line">
 
                 {prompt.label}
-              </button>
+              </motion.button>
           )}
           </div> :
         null}

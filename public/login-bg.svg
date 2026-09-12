@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1400" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <radialGradient id="glow1" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#3DDC84" stop-opacity="0.35" />
+      <stop offset="100%" stop-color="#3DDC84" stop-opacity="0" />
+    </radialGradient>
+    <radialGradient id="glow2" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#3DDC84" stop-opacity="0.18" />
+      <stop offset="100%" stop-color="#3DDC84" stop-opacity="0" />
+    </radialGradient>
+    <linearGradient id="fade" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#101012" stop-opacity="0" />
+      <stop offset="100%" stop-color="#101012" stop-opacity="0.9" />
+    </linearGradient>
+    <pattern id="grid" width="48" height="48" patternUnits="userSpaceOnUse">
+      <path d="M 48 0 L 0 0 0 48" fill="none" stroke="#FFFFFF" stroke-opacity="0.045" stroke-width="1" />
+    </pattern>
+  </defs>
+
+  <rect width="1200" height="1400" fill="#101012" />
+  <rect width="1200" height="1400" fill="url(#grid)" />
+
+  <circle cx="220" cy="260" r="420" fill="url(#glow1)" />
+  <circle cx="980" cy="620" r="360" fill="url(#glow2)" />
+  <circle cx="300" cy="1150" r="300" fill="url(#glow2)" />
+
+  <g opacity="0.5">
+    <rect x="60" y="980" width="70" height="420" fill="#17171A" />
+    <rect x="150" y="900" width="90" height="500" fill="#1B1B1E" />
+    <rect x="260" y="1040" width="60" height="360" fill="#17171A" />
+    <rect x="340" y="860" width="100" height="540" fill="#1E1E21" />
+    <rect x="460" y="960" width="75" height="440" fill="#17171A" />
+    <rect x="555" y="920" width="85" height="480" fill="#1B1B1E" />
+    <rect x="660" y="1000" width="65" height="400" fill="#17171A" />
+    <rect x="745" y="880" width="95" height="520" fill="#1E1E21" />
+    <rect x="860" y="1010" width="70" height="390" fill="#17171A" />
+    <rect x="950" y="930" width="90" height="470" fill="#1B1B1E" />
+    <rect x="1060" y="990" width="80" height="410" fill="#17171A" />
+
+    <g fill="#3DDC84" fill-opacity="0.7">
+      <rect x="70" y="1000" width="6" height="6" />
+      <rect x="90" y="1030" width="6" height="6" />
+      <rect x="165" y="930" width="6" height="6" />
+      <rect x="190" y="960" width="6" height="6" />
+      <rect x="355" y="890" width="6" height="6" />
+      <rect x="380" y="920" width="6" height="6" />
+      <rect x="570" y="950" width="6" height="6" />
+      <rect x="600" y="980" width="6" height="6" />
+      <rect x="760" y="910" width="6" height="6" />
+      <rect x="790" y="940" width="6" height="6" />
+      <rect x="965" y="960" width="6" height="6" />
+      <rect x="995" y="990" width="6" height="6" />
+    </g>
+  </g>
+
+  <path
+    d="M 0 700 L 100 660 L 220 680 L 340 600 L 460 630 L 600 540 L 740 590 L 880 500 L 1020 560 L 1200 480"
+    fill="none"
+    stroke="#3DDC84"
+    stroke-opacity="0.5"
+    stroke-width="3" />
+  <circle cx="1200" cy="480" r="7" fill="#3DDC84" />
+
+  <rect width="1200" height="1400" fill="url(#fade)" />
+</svg>

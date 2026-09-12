@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Navigate, useLocation, useNavigate } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import { EyeIcon, EyeOffIcon, Loader2Icon } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../components/ui/Toast';
@@ -63,13 +64,17 @@ export function Login() {
 
   return (
     <div className="flex min-h-screen w-full bg-ink font-sans text-white">
-      <div className="relative hidden w-[46%] flex-col justify-between border-r border-white/10 p-12 lg:flex">
+      <div className="relative hidden w-[46%] flex-col justify-between border-r border-white/10 bg-[url('/login-bg.svg')] bg-cover bg-center p-12 lg:flex">
         <div className="flex items-center gap-3">
           <Logo />
           <span className="text-[22px] font-semibold tracking-tight">Vantra</span>
         </div>
 
-        <div>
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.1, ease: [0.23, 1, 0.32, 1] }}>
+
           <p className="text-[34px] font-semibold leading-tight tracking-tight">
             Every rate, file, and lead — in one place.
           </p>
@@ -77,9 +82,14 @@ export function Login() {
             Vantra brings your pipeline, contacts, and payroll together so you
             can spend less time switching tabs and more time closing loans.
           </p>
-        </div>
+        </motion.div>
 
-        <div className="rounded-[22px] bg-white/10 p-6 backdrop-blur">
+        <motion.div
+          className="rounded-[22px] bg-white/10 p-6 backdrop-blur"
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.25, ease: [0.23, 1, 0.32, 1] }}>
+
           <p className="text-sm text-white/60">Closed volume YTD</p>
           <p className="mt-2 text-[40px] font-semibold leading-none tracking-tight tabular">
             $17.25M
@@ -87,11 +97,16 @@ export function Login() {
           <p className="mt-3 text-sm text-white/60">
             Across 38 funded loans this year
           </p>
-        </div>
+        </motion.div>
       </div>
 
       <div className="flex flex-1 flex-col items-center justify-center px-6 py-16">
-        <div className="w-full max-w-sm">
+        <motion.div
+          className="w-full max-w-sm"
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, ease: [0.23, 1, 0.32, 1] }}>
+
           <div className="mb-8 flex items-center gap-3 lg:hidden">
             <Logo />
             <span className="text-[22px] font-semibold tracking-tight">Vantra</span>
@@ -202,7 +217,7 @@ export function Login() {
               Request access
             </button>
           </p>
-        </div>
+        </motion.div>
       </div>
     </div>);
 

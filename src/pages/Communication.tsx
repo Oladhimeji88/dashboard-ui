@@ -1,4 +1,5 @@
 import React, { useMemo, useRef, useState } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
 import { PaperclipIcon, PhoneIcon, SendIcon } from 'lucide-react';
 import { Panel } from '../components/ui/Panel';
 import { Segmented } from '../components/ui/Segmented';
@@ -63,14 +64,18 @@ export function Communication() {
   return (
     <div className="pt-6">
       <header className="flex flex-wrap items-end justify-between gap-6">
-        <div>
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, ease: [0.23, 1, 0.32, 1] }}>
+
           <h1 className="text-[40px] font-semibold leading-none tracking-tight">
             Communication
           </h1>
           <p className="mt-3 text-[15px] text-muted">
             {unread} unread · average reply time 14 min
           </p>
-        </div>
+        </motion.div>
         <Segmented
           label="Channel filter"
           options={channels}
@@ -88,10 +93,14 @@ export function Communication() {
             </p> :
 
           <ul className="divide-y divide-line">
-              {visible.map((thread) => {
+              {visible.map((thread, index) => {
               const isActive = active?.id === thread.id;
               return (
-                <li key={thread.id}>
+                <motion.li
+                  key={thread.id}
+                  initial={{ opacity: 0, x: -12 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.35, delay: index * 0.06, ease: [0.23, 1, 0.32, 1] }}>
                     <button
                     type="button"
                     onClick={() => setActiveId(thread.id)}
@@ -130,7 +139,7 @@ export function Communication() {
                         </span>
                       </span>
                     </button>
-                  </li>);
+                  </motion.li>);
 
             })}
             </ul>
@@ -166,13 +175,18 @@ export function Communication() {
             </div>
 
             <ol className="flex-1 space-y-4 overflow-y-auto py-6">
+              <AnimatePresence initial={false}>
               {active.messages.map((message) => {
               const mine = message.from === 'me';
               return (
-                <li
+                <motion.li
                   key={message.id}
+                  layout
+                  initial={{ opacity: 0, y: 12, scale: 0.98 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  transition={{ duration: 0.3, ease: [0.23, 1, 0.32, 1] }}
                   className={mine ? 'flex justify-end' : 'flex justify-start'}>
-                  
+
                     <div
                     className={[
                     'max-w-[75%] rounded-3xl px-5 py-3.5',
@@ -180,17 +194,18 @@ export function Communication() {
                     'rounded-br-lg bg-ink text-white' :
                     'rounded-bl-lg bg-white text-ink'].
                     join(' ')}>
-                    
+
                       <p className="text-[15px] leading-relaxed">{message.body}</p>
                       <p
                       className={`mt-1.5 text-xs ${mine ? 'text-white/60' : 'text-muted'}`}>
-                      
+
                         {message.time}
                       </p>
                     </div>
-                  </li>);
+                  </motion.li>);
 
             })}
+              </AnimatePresence>
             </ol>
 
             <form

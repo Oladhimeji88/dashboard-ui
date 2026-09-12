@@ -1,4 +1,5 @@
 import React, { useMemo, useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import {
   MailIcon,
   MapPinIcon,
@@ -9,6 +10,7 @@ import {
 import { Panel } from '../components/ui/Panel';
 import { Segmented } from '../components/ui/Segmented';
 import { Modal } from '../components/ui/Modal';
+import { CountUp } from '../components/ui/CountUp';
 import { useToast } from '../components/ui/Toast';
 import {
   contacts as initialContacts,
@@ -97,14 +99,18 @@ export function Contacts() {
   return (
     <div className="pt-6">
       <header className="flex flex-wrap items-end justify-between gap-6">
-        <div>
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, ease: [0.23, 1, 0.32, 1] }}>
+
           <h1 className="text-[40px] font-semibold leading-none tracking-tight">
             Contacts
           </h1>
           <p className="mt-3 text-[15px] text-muted">
             {contacts.length} people · 4 need a follow-up this week
           </p>
-        </div>
+        </motion.div>
         <div className="flex flex-wrap items-center gap-3">
           <div className="flex items-center gap-2 rounded-full bg-panel px-4 py-2.5">
             <SearchIcon className="h-4 w-4 text-muted" strokeWidth={2} />
@@ -211,17 +217,21 @@ export function Contacts() {
                   </tr>
                 </thead>
                 <tbody>
-                  {filtered.map((contact) => {
+                  {filtered.map((contact, index) => {
                   const active = selected?.id === contact.id;
                   return (
-                    <tr
+                    <motion.tr
+                      layout
                       key={contact.id}
                       onClick={() => setSelectedId(contact.id)}
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.35, delay: index * 0.04, ease: [0.23, 1, 0.32, 1] }}
                       className={[
                       'cursor-pointer border-t border-line transition-colors duration-150 ease-soft',
                       active ? 'bg-white' : 'hover:bg-panelSoft'].
                       join(' ')}>
-                      
+
                         <td className="px-6 py-4">
                           <div className="flex items-center gap-3">
                             <img
@@ -252,7 +262,7 @@ export function Contacts() {
                         <td className="whitespace-nowrap px-6 py-4 text-right text-sm text-muted">
                           {contact.lastTouch}
                         </td>
-                      </tr>);
+                      </motion.tr>);
 
                 })}
                 </tbody>
@@ -261,8 +271,15 @@ export function Contacts() {
           }
         </section>
 
+        <AnimatePresence mode="wait">
         {selected ?
-        <Panel as="aside" className="h-fit p-7">
+        <motion.div
+          key={selected.id}
+          initial={{ opacity: 0, x: 16 }}
+          animate={{ opacity: 1, x: 0 }}
+          exit={{ opacity: 0, x: -16 }}
+          transition={{ duration: 0.3, ease: [0.23, 1, 0.32, 1] }}>
+          <Panel as="aside" className="h-fit p-7">
             <div className="flex items-center gap-4">
               <img
               src={selected.avatar}
@@ -303,12 +320,14 @@ export function Contacts() {
               <div className="rounded-2xl bg-white p-4">
                 <p className="text-xs text-muted">Loan amount</p>
                 <p className="mt-1 text-[20px] font-semibold tabular">
-                  {currency.format(selected.amount)}
+                  <CountUp value={selected.amount} format={(n) => currency.format(n)} />
                 </p>
               </div>
               <div className="rounded-2xl bg-white p-4">
                 <p className="text-xs text-muted">Fit score</p>
-                <p className="mt-1 text-[20px] font-semibold tabular">{selected.score}</p>
+                <p className="mt-1 text-[20px] font-semibold tabular">
+                  <CountUp value={selected.score} />
+                </p>
               </div>
             </div>
 
@@ -326,8 +345,10 @@ export function Contacts() {
 
               Log an activity
             </button>
-          </Panel> :
+          </Panel>
+          </motion.div> :
         null}
+        </AnimatePresence>
       </div>
     </div>);
 

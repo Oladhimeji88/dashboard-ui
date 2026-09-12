@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { motion } from 'framer-motion';
 import { HeartIcon, SendIcon, SlidersHorizontalIcon, XIcon } from 'lucide-react';
 import { forumPosts as initialForumPosts } from '../../data/forum';
 import { useToast } from '../ui/Toast';
@@ -99,8 +100,14 @@ export function ForumCard() {
       </div>
 
       <ul className="flex-1 divide-y divide-line">
-        {sortedPosts.map((post) =>
-        <li key={post.id} className="flex gap-4 py-5 first:pt-0">
+        {sortedPosts.map((post, index) =>
+        <motion.li
+          layout
+          key={post.id}
+          className="flex gap-4 py-5 first:pt-0"
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, delay: index * 0.08, ease: [0.23, 1, 0.32, 1] }}>
             <img
             src={post.avatar}
             alt=""
@@ -185,7 +192,7 @@ export function ForumCard() {
                 </div> :
             null}
             </div>
-          </li>
+          </motion.li>
         )}
       </ul>
     </section>);
