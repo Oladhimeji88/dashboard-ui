@@ -9,7 +9,8 @@ export const navItems: NavItem[] = [
 { label: 'Communication', to: '/communication' },
 { label: 'Marketing Center', to: '/marketing' },
 { label: 'Loan Center', to: '/loans' },
-{ label: 'My Payroll', to: '/payroll' }];
+{ label: 'My Payroll', to: '/payroll' },
+{ label: 'AI Assistant', to: '/assistant' }];
 
 
 export const currentUser = {
