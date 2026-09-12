@@ -1,9 +1,11 @@
 import React, { useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   AwardIcon,
   CameraIcon,
   CheckIcon,
   CopyIcon,
+  LogOutIcon,
   MailIcon,
   MapPinIcon,
   PencilIcon,
@@ -12,6 +14,7 @@ import {
   XIcon } from
 'lucide-react';
 import { Panel, SectionHeader } from '../components/ui/Panel';
+import { useAuth } from '../context/AuthContext';
 import {
   achievements,
   notificationSettings as initialNotificationSettings,
@@ -51,12 +54,19 @@ function Toggle({
 }
 
 export function Profile() {
+  const navigate = useNavigate();
+  const { logout } = useAuth();
   const [profile, setProfile] = useState(initialProfile);
   const [draft, setDraft] = useState(initialProfile);
   const [editing, setEditing] = useState(false);
   const [notifications, setNotifications] = useState(initialNotificationSettings);
   const [copied, setCopied] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleLogout = () => {
+    logout();
+    navigate('/login', { replace: true });
+  };
 
   const startEditing = () => {
     setDraft(profile);
@@ -294,6 +304,15 @@ export function Profile() {
               <p className="mt-1 font-medium">{profile.joined}</p>
             </div>
           </div>
+
+          <button
+            type="button"
+            onClick={handleLogout}
+            className="mt-6 flex w-full items-center justify-center gap-2 rounded-full bg-panel py-3 text-sm font-semibold text-inkSoft transition-colors duration-150 ease-soft hover:bg-line">
+
+            <LogOutIcon className="h-4 w-4" strokeWidth={2} />
+            Log out
+          </button>
         </Panel>
 
         <div className="grid gap-6">
