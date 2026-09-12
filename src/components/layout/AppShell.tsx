@@ -85,15 +85,16 @@ export function AppShell() {
 
           <div className="relative ml-auto flex items-center gap-2">
             <div className="relative z-40 hidden sm:block">
-              <button
+              <motion.button
                 type="button"
                 aria-label="Search"
                 aria-expanded={openMenu === 'search'}
                 onClick={() => toggleMenu('search')}
+                whileTap={{ scale: 0.92 }}
                 className="flex h-11 w-11 items-center justify-center rounded-full bg-panel text-inkSoft transition-colors duration-150 ease-soft hover:bg-line">
 
                 <SearchIcon className="h-[18px] w-[18px]" strokeWidth={1.9} />
-              </button>
+              </motion.button>
 
               {openMenu === 'search' ?
               <div className="absolute right-0 top-14 z-40 w-72 rounded-2xl bg-white p-3 shadow-[0_12px_32px_rgba(0,0,0,0.12)] ring-1 ring-line">
@@ -136,28 +137,30 @@ export function AppShell() {
               null}
             </div>
 
-            <button
+            <motion.button
               type="button"
               aria-label="Add contact"
               onClick={() => navigate('/contacts')}
+              whileTap={{ scale: 0.92 }}
               className="relative z-40 hidden h-11 w-11 items-center justify-center rounded-full bg-accentSoft text-ink transition-colors duration-150 ease-soft hover:bg-accent sm:flex">
 
               <UserPlusIcon className="h-[18px] w-[18px]" strokeWidth={1.9} />
-            </button>
+            </motion.button>
 
             <div className="relative z-40 hidden sm:block">
-              <button
+              <motion.button
                 type="button"
                 aria-label="Live rate alerts"
                 aria-expanded={openMenu === 'alerts'}
                 onClick={() => toggleMenu('alerts')}
+                whileTap={{ scale: 0.92 }}
                 className={[
                 'flex h-11 w-11 items-center justify-center rounded-full transition-colors duration-150 ease-soft',
                 alertsOn ? 'bg-accent text-ink' : 'bg-panel text-inkSoft hover:bg-line'].
                 join(' ')}>
 
                 <RadioIcon className="h-[18px] w-[18px]" strokeWidth={1.9} />
-              </button>
+              </motion.button>
 
               {openMenu === 'alerts' ?
               <div className="absolute right-0 top-14 z-40 w-72 rounded-2xl bg-white p-4 shadow-[0_12px_32px_rgba(0,0,0,0.12)] ring-1 ring-line">
@@ -202,28 +205,33 @@ export function AppShell() {
               null}
             </div>
 
-            <button
+            <motion.button
               type="button"
               aria-label="Payments"
               onClick={() => navigate('/payroll')}
+              whileTap={{ scale: 0.92 }}
               className="relative z-40 hidden h-11 w-11 items-center justify-center rounded-full bg-panel text-inkSoft transition-colors duration-150 ease-soft hover:bg-line sm:flex">
 
               <WalletIcon className="h-[18px] w-[18px]" strokeWidth={1.9} />
-            </button>
+            </motion.button>
 
             <div className="relative z-40 hidden sm:block">
-              <button
+              <motion.button
                 type="button"
                 aria-label="Notifications"
                 aria-expanded={openMenu === 'notifications'}
                 onClick={() => toggleMenu('notifications')}
+                whileTap={{ scale: 0.92 }}
                 className="relative flex h-11 w-11 items-center justify-center rounded-full bg-panel text-inkSoft transition-colors duration-150 ease-soft hover:bg-line">
 
                 <BellIcon className="h-[18px] w-[18px]" strokeWidth={1.9} />
                 {unreadCount > 0 ?
-                <span className="absolute right-2.5 top-2.5 h-2 w-2 rounded-full bg-down ring-2 ring-panel" /> :
+                <motion.span
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  className="absolute right-2.5 top-2.5 h-2 w-2 rounded-full bg-down ring-2 ring-panel" /> :
                 null}
-              </button>
+              </motion.button>
 
               {openMenu === 'notifications' ?
               <div className="absolute right-0 top-14 z-40 w-80 rounded-2xl bg-white p-2 shadow-[0_12px_32px_rgba(0,0,0,0.12)] ring-1 ring-line">
@@ -295,8 +303,11 @@ export function AppShell() {
         </AnimatePresence>
       </main>
 
-      <nav
+      <motion.nav
         aria-label="Primary"
+        initial={{ opacity: 0, y: 40 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.15, ease: [0.23, 1, 0.32, 1] }}
         className="fixed inset-x-0 bottom-6 z-40 flex justify-center px-4">
 
         <div className="flex max-w-full items-center gap-1 overflow-x-auto rounded-full border border-white/40 bg-white/40 px-2 py-2 shadow-[0_12px_40px_rgba(0,0,0,0.14)] backdrop-blur-xl">
@@ -319,7 +330,7 @@ export function AppShell() {
 
           })}
         </div>
-      </nav>
+      </motion.nav>
     </div>);
 
 }
